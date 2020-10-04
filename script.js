@@ -166,3 +166,42 @@ $("#add-weight-btn").on("click", function (event) {
             };
         });
     }
+ else {
+        var queryURL = "https://www.food2fork.com/api/search?key=07ffefdb900b05233883177a85254be2&q=pasta&sort=r&page=" + pNumber;
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+
+            response = JSON.parse(response);
+            console.log(response.recipes[i]);
+
+            $("#Recipes").empty();
+
+            for (var i = 0; i < 3; i++) {
+                var randomNumber = [Math.floor(Math.random() *  30)];
+                var recipeDiv = $("<div>");
+                recipeDiv.addClass("recipeDiv");
+
+                var title = $("<h5>")
+                title.addClass("title");
+                title.text(response.recipes[randomNumber].title);
+                recipeDiv.append(title);
+
+                var recipeImage = $("<img>");
+                recipeImage.addClass("recipeImage");
+                recipeImage.attr("src", response.recipes[randomNumber].image_url);
+                recipeDiv.append(recipeImage);
+
+                recipeImage.wrap("<a target='_blank' href='" + response.recipes[randomNumber].source_url + "'</a>");
+                $("#Recipes").prepend(recipeDiv);
+            };
+        });
+    };
+
+    $("#reset-data-btn").on("click", function () {
+        localStorage.clear(); // to clear everything in local storage
+        window.location.reload(); // page refresh to clear out table data
+    });
+});
